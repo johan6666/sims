@@ -687,12 +687,62 @@ function renderNoAccess() {
     </div>`;
 }
 
+function getOpenSidebarModule() {
+  return Object.entries(S.openMods || {}).find(([, isOpen]) => Boolean(isOpen))?.[0] || null;
+}
+
+function renderSidebarFlyout() {
+  const flyout = document.getElementById('sb-flyout');
+  if (!flyout) return;
+
+  if (!S.collapsed || !S.flyoutModule) {
+    flyout.innerHTML = '';
+    flyout.style.display = 'none';
+    flyout.setAttribute('aria-hidden', 'true');
+    return;
+  }
+
+  const mod = S.flyoutModule;
+  if (!mod || !ACCESSIBLE_SCHEMA[mod]) {
+    flyout.innerHTML = '';
+    flyout.style.display = 'none';
+    flyout.setAttribute('aria-hidden', 'true');
+    return;
+  }
+
+  const info = ACCESSIBLE_SCHEMA[mod];
+  const menuHtml = Object.keys(info.menus).map(menu => {
+    const isActive = S.active?.mod === mod && S.active?.menu === menu;
+    return `<button class="submenu-btn" onclick="selectMenu(this)" data-mod="${esc(mod)}" data-menu="${esc(menu)}"
+      style="border-left:2px solid ${isActive ? info.color : 'transparent'};
+             background:${isActive ? info.color + '25' : 'rgba(255,255,255,0.02)'};
+             color:${isActive ? info.color : 'rgba(255,255,255,0.7)'}">${esc(menu)}</button>`;
+  }).join('');
+
+  flyout.innerHTML = `
+    <div class="sb-flyout-panel">
+      <div class="sb-flyout-head">
+        <div>
+          <strong>${esc(mod)}</strong><br>
+          <small>Daftar menu</small>
+        </div>
+        <div style="width:10px;height:10px;border-radius:50%;background:${info.color};box-shadow:0 0 0 4px ${info.color}22;"></div>
+      </div>
+      <div class="sb-flyout-list">${menuHtml}</div>
+    </div>`;
+  flyout.style.top = `${Math.max(72, S.flyoutTop || 72)}px`;
+  flyout.style.display = 'block';
+  flyout.setAttribute('aria-hidden', 'false');
+}
+
 function renderSidebar() {
   let h = '';
   Object.entries(ACCESSIBLE_SCHEMA).forEach(([mod, info]) => {
     const open = Boolean(S.openMods[mod]);
+    const isActiveModule = S.active?.mod === mod;
     h += `<div style="margin-bottom:2px">
-      <button class="module-btn" onclick="toggleModule(this)" data-mod="${esc(mod)}">
+      <button class="module-btn" onclick="toggleModule(this)" data-mod="${esc(mod)}"
+        style="${isActiveModule ? `background:${info.color}25;color:${info.color};` : ''}">
         <span style="flex-shrink:0;font-size:1rem">${info.icon}</span>
         <span class="sb-label" style="flex:1;line-height:1.3">${esc(mod)}</span>
         <span class="sb-label" style="font-size:0.65rem;color:rgba(255,255,255,0.3)">${open ? '▲' : '▼'}</span>
@@ -712,6 +762,7 @@ function renderSidebar() {
     h += '</div>';
   });
   document.getElementById('sb-modules').innerHTML = h || '<div style="padding:12px 10px;color:rgba(255,255,255,0.45);font-size:0.78rem">Tidak ada menu.</div>';
+  renderSidebarFlyout();
 }
 
 function showDashboard() {
@@ -739,6 +790,7 @@ async function selectMenuByState(mod, menu) {
   S.search = '';
   S.page = 1;
   S.openMods = { [mod]: true };
+  S.flyoutModule = null;
   document.getElementById('search').value = '';
   syncUrlWithMenu(getMenuSlug(mod, menu));
   const hb = document.getElementById('btn-home');
@@ -756,7 +808,13 @@ async function selectMenuByState(mod, menu) {
 function toggleModule(btn) {
   const mod = btn.dataset.mod;
   const isOpen = Boolean(S.openMods[mod]);
-  S.openMods = isOpen ? {} : { [mod]: true };
+  if (S.collapsed) {
+    S.openMods = isOpen ? {} : { [mod]: true };
+    S.flyoutModule = isOpen ? null : mod;
+    S.flyoutTop = Math.max(72, btn.getBoundingClientRect().top);
+  } else {
+    S.openMods = isOpen ? {} : { [mod]: true };
+  }
   renderSidebar();
 }
 

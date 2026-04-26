@@ -616,14 +616,63 @@ function syncSearchSelect(fieldName) {
 }
 
 // ── Sidebar ──────────────────────────────────────────────────────
+function getOpenSidebarModule() {
+  return Object.entries(S.openMods || {}).find(([, isOpen]) => Boolean(isOpen))?.[0] || null;
+}
+
+function renderSidebarFlyout() {
+  const flyout = document.getElementById('sb-flyout');
+  if (!flyout) return;
+
+  if (!S.collapsed || !S.flyoutModule) {
+    flyout.innerHTML = '';
+    flyout.style.display = 'none';
+    flyout.setAttribute('aria-hidden', 'true');
+    return;
+  }
+
+  const mod = S.flyoutModule;
+  if (!mod || !SCHEMA[mod]) {
+    flyout.innerHTML = '';
+    flyout.style.display = 'none';
+    flyout.setAttribute('aria-hidden', 'true');
+    return;
+  }
+
+  const info = SCHEMA[mod];
+  const menuHtml = Object.keys(info.menus).map(menu => {
+    const isActive = S.active?.menu === menu && S.active?.mod === mod;
+    return `<button class="submenu-btn" onclick="selectMenu(this)" data-mod="${esc(mod)}" data-menu="${esc(menu)}"
+      style="border-left:2px solid ${isActive ? info.color : 'transparent'};
+             background:${isActive ? info.color + '25' : 'rgba(255,255,255,0.02)'};
+             color:${isActive ? info.color : 'rgba(255,255,255,0.7)'}">${esc(menu)}</button>`;
+  }).join('');
+
+  flyout.innerHTML = `
+    <div class="sb-flyout-panel">
+      <div class="sb-flyout-head">
+        <div>
+          <strong>${esc(mod)}</strong><br>
+          <small>Daftar menu</small>
+        </div>
+        <div style="width:10px;height:10px;border-radius:50%;background:${info.color};box-shadow:0 0 0 4px ${info.color}22;"></div>
+      </div>
+      <div class="sb-flyout-list">${menuHtml}</div>
+    </div>`;
+  flyout.style.top = `${Math.max(72, S.flyoutTop || 72)}px`;
+  flyout.style.display = 'block';
+  flyout.setAttribute('aria-hidden', 'false');
+}
+
 function toggleSidebar() {
   S.collapsed = !S.collapsed;
-  document.getElementById('sidebar').style.width = S.collapsed ? '56px' : '240px';
-  document.getElementById('sb-toggle').textContent = S.collapsed ? '→' : '←';
-  document.getElementById('sb-back').style.display = S.collapsed ? 'none' : '';
-  document.getElementById('sb-title').style.display = S.collapsed ? 'none' : '';
-  document.querySelectorAll('.sb-label').forEach(el => el.style.display = S.collapsed ? 'none' : '');
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.toggle('collapsed', S.collapsed);
+  document.getElementById('sb-toggle').textContent = S.collapsed ? '>' : '<';
+  document.getElementById('sb-toggle').setAttribute('aria-expanded', String(!S.collapsed));
+  if (!S.collapsed) S.flyoutModule = null;
   renderSidebar();
+  renderSidebarFlyout();
 }
 
 function renderSidebar() {
@@ -631,7 +680,7 @@ function renderSidebar() {
   Object.entries(SCHEMA).forEach(([mod, info]) => {
     const open = S.openMods[mod];
     h += `<div style="margin-bottom:2px">
-      <button class="module-btn" onclick="toggleModule(this)" data-mod="${esc(mod)}">
+      <button class="module-btn" onclick="toggleModule(this)" data-mod="${esc(mod)}" style="${S.active?.mod === mod ? `background:${info.color}25;color:${info.color};` : ''}">
         <span style="flex-shrink:0;font-size:1rem">${info.icon}</span>
         <span class="sb-label" style="flex:1;line-height:1.3">${esc(mod)}</span>
         <span class="sb-label" style="font-size:0.65rem;color:rgba(255,255,255,0.3)">${open?'▲':'▼'}</span>
@@ -651,11 +700,19 @@ function renderSidebar() {
     h += `</div>`;
   });
   document.getElementById('sb-modules').innerHTML = h;
+  renderSidebarFlyout();
 }
 
 function toggleModule(btn) {
   const mod = btn.dataset.mod;
-  S.openMods[mod] = !S.openMods[mod];
+  const isOpen = Boolean(S.openMods[mod]);
+  if (S.collapsed) {
+    S.openMods = isOpen ? {} : { [mod]: true };
+    S.flyoutModule = isOpen ? null : mod;
+    S.flyoutTop = Math.max(72, btn.getBoundingClientRect().top);
+  } else {
+    S.openMods[mod] = !S.openMods[mod];
+  }
   renderSidebar();
 }
 
@@ -677,6 +734,8 @@ function selectMenu(btn) {
   S.active = {mod, menu};
   S.search = '';
   document.getElementById('search').value = '';
+  S.openMods = { [mod]: true };
+  S.flyoutModule = null;
   const hb = document.getElementById('btn-home');
   hb.style.background = 'none';
   hb.style.color = 'rgba(255,255,255,0.6)';

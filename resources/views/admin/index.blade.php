@@ -14,7 +14,7 @@ window.ADMIN_RBAC = @json($adminRbac ?? ['user' => null, 'modules' => []]);
         <div>SIMS Admin</div>
         <small>SMA MA'ARIF KROYA</small>
       </div>
-      <button id="sb-toggle" onclick="toggleSidebar()">←</button>
+      <button id="sb-toggle" onclick="toggleSidebar()" aria-expanded="true">&lt;</button>
     </div>
     <div style="padding:8px 8px 0;flex-shrink:0;">
       <button id="btn-home" onclick="showDashboard()" class="sb-home sb-home-active">
@@ -52,6 +52,8 @@ window.ADMIN_RBAC = @json($adminRbac ?? ['user' => null, 'modules' => []]);
     <div id="main-content" style="flex:1;overflow-y:auto;padding:24px;"></div>
   </div>
 </div>
+
+<div id="sb-flyout" aria-hidden="true"></div>
 
 {{-- MODAL --}}
 <div id="modal-overlay" onclick="closeModal()">
