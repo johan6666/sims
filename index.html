@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMA MA'ARIF KROYA — Sistem Informasi Sekolah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1B6B3A;
+    --green2: #22854A;
+    --green-light: #2DAF60;
+    --gold: #C9932A;
+    --gold2: #E5A830;
+    --navy: #0F1F14;
+    --cream: #F8F5EF;
+    --white: #FFFFFF;
+    --text: #1A2E1F;
+    --muted: #6B7E70;
+    --border: rgba(27,107,58,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ─── TOPBAR ─── */
+  .topbar {
+    background: var(--green);
+    color: rgba(255,255,255,0.75);
+    font-size: 0.78rem;
+    padding: 8px 5vw;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 1rem;
+  }
+  .topbar a { color: rgba(255,255,255,0.75); text-decoration: none; }
+  .topbar span { display: flex; align-items: center; gap: 6px; }
+
+  /* ─── NAV ─── */
+  nav {
+    background: white;
+    border-bottom: 2px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    padding: 0 5vw;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 72px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 14px;
+  }
+
+  .logo-emblem {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--green), var(--green2));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem;
+    color: white; letter-spacing: -0.04em;
+    box-shadow: 0 4px 12px rgba(27,107,58,0.3);
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    display: flex; flex-direction: column;
+    font-family: 'Syne', sans-serif;
+  }
+  .logo-text strong {
+    font-size: 1rem; font-weight: 800;
+    color: var(--green); letter-spacing: -0.02em; line-height: 1;
+  }
+  .logo-text small {
+    font-size: 0.7rem; color: var(--muted); font-weight: 500; letter-spacing: 0.04em;
+  }
+
+  .nav-links {
+    display: flex; gap: 0; list-style: none;
+    height: 72px;
+  }
+  .nav-links a {
+    display: flex; align-items: center;
+    padding: 0 1.1rem;
+    color: var(--text); text-decoration: none;
+    font-size: 0.875rem; font-weight: 600;
+    border-bottom: 3px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    height: 100%;
+  }
+  .nav-links a:hover { color: var(--green); border-bottom-color: var(--green); }
+
+  .nav-cta {
+    background: var(--green);
+    color: white; font-weight: 700; font-size: 0.85rem;
+    padding: 0.6rem 1.25rem; border-radius: 8px; text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .nav-cta:hover { background: var(--green2); transform: translateY(-1px); }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    height: 88vh; min-height: 560px;
+    overflow: hidden;
+    display: flex; align-items: flex-end;
+  }
+
+  .hero-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center 30%;
+  }
+
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(10,30,16,0.88) 0%,
+      rgba(10,30,16,0.7) 50%,
+      rgba(10,30,16,0.3) 100%
+    );
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 5vw 80px;
+    max-width: 700px;
+  }
+
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(201,147,42,0.2);
+    border: 1px solid rgba(201,147,42,0.4);
+    color: var(--gold2);
+    font-size: 0.75rem; font-weight: 700;
+    padding: 5px 14px; border-radius: 100px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: white;
+    margin-bottom: 1.25rem;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--gold2);
+  }
+
+  .hero p {
+    color: rgba(255,255,255,0.75);
+    font-size: 1rem; max-width: 480px;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  .hero-actions {
+    display: flex; gap: 0.75rem; flex-wrap: wrap;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    color: white; font-weight: 700; font-size: 0.95rem;
+    padding: 0.8rem 1.75rem; border-radius: 8px; text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 6px 24px rgba(201,147,42,0.35);
+  }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(201,147,42,0.45); }
+
+  .btn-ghost {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: white; font-weight: 600; font-size: 0.95rem;
+    padding: 0.8rem 1.75rem; border-radius: 8px; text-decoration: none;
+    transition: background 0.2s;
+    backdrop-filter: blur(8px);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.18); }
+
+  /* ─── QUICK STATS BAR ─── */
+  .stats-bar {
+    background: var(--green);
+    padding: 0 5vw;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+
+  .stat-item {
+    padding: 1.5rem 1rem;
+    display: flex; align-items: center; gap: 1rem;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .stat-item:last-child { border-right: none; }
+
+  .stat-icon {
+    font-size: 1.5rem; flex-shrink: 0;
+    opacity: 0.85;
+  }
+
+  .stat-info strong {
+    display: block;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem; font-weight: 800;
+    color: var(--gold2); line-height: 1;
+  }
+
+  .stat-info span {
+    font-size: 0.78rem; color: rgba(255,255,255,0.65);
+    font-weight: 500;
+  }
+
+  /* ─── SECTION COMMON ─── */
+  .section {
+    padding: 80px 5vw;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--green); font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 18px; height: 2px;
+    background: var(--gold);
+    border-radius: 2px;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+    font-weight: 800; letter-spacing: -0.03em;
+    line-height: 1.15; color: var(--text);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-desc {
+    color: var(--muted); font-size: 0.975rem;
+    max-width: 520px; line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+
+  /* ─── ABOUT / VISI MISI ─── */
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: center;
+  }
+
+  .about-img-wrap {
+    position: relative;
+  }
+
+  .about-img {
+    width: 100%; aspect-ratio: 4/3;
+    object-fit: cover; border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  }
+
+  .about-badge {
+    position: absolute; bottom: -20px; right: -20px;
+    background: var(--green);
+    color: white; padding: 1.25rem 1.5rem;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(27,107,58,0.35);
+  }
+
+  .about-badge strong {
+    display: block;
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem; font-weight: 800; line-height: 1;
+  }
+  .about-badge span { font-size: 0.78rem; color: rgba(255,255,255,0.7); }
+
+  .vm-cards {
+    display: flex; flex-direction: column; gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .vm-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.25rem 1.5rem;
+    border-left: 4px solid var(--green);
+  }
+
+  .vm-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem; font-weight: 700;
+    color: var(--green);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+
+  .vm-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+
+  /* ─── FITUR / PORTAL AKADEMIK ─── */
+  .portal-section {
+    background: var(--navy);
+    padding: 80px 0;
+  }
+
+  .portal-inner {
+    max-width: 1280px; margin: 0 auto;
+    padding: 0 5vw;
+  }
+
+  .portal-inner .section-label { color: var(--gold2); }
+  .portal-inner h2 { color: white; }
+  .portal-inner .section-desc { color: rgba(255,255,255,0.5); }
+
+  .portal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .portal-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 1.75rem;
+    transition: background 0.3s, transform 0.3s;
+    cursor: default;
+  }
+  .portal-card:hover {
+    background: rgba(255,255,255,0.09);
+    transform: translateY(-4px);
+    border-color: rgba(201,147,42,0.3);
+  }
+
+  .portal-card-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; margin-bottom: 1rem;
+  }
+
+  .portal-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    color: white; margin-bottom: 0.5rem;
+  }
+
+  .portal-card p { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  .portal-card .card-link {
+    display: inline-flex; align-items: center; gap: 4px;
+    margin-top: 1rem; font-size: 0.78rem;
+    color: var(--gold2); font-weight: 600; text-decoration: none;
+  }
+
+  /* ─── GALERI ─── */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 220px 220px;
+    gap: 12px;
+  }
+
+  .gallery-item {
+    border-radius: 14px; overflow: hidden;
+    position: relative;
+  }
+
+  .gallery-item:first-child {
+    grid-row: 1 / 3;
+    grid-column: 1 / 2;
+  }
+
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    display: block;
+  }
+
+  .gallery-item:hover img { transform: scale(1.05); }
+
+  .gallery-item .overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,30,16,0.7) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.3s;
+    display: flex; align-items: flex-end; padding: 1rem;
+  }
+
+  .gallery-item:hover .overlay { opacity: 1; }
+
+  .overlay span {
+    color: white; font-size: 0.82rem; font-weight: 600;
+  }
+
+  /* ─── NEWS ─── */
+  .news-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+  }
+
+  .news-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px; overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .news-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
+
+  .news-img {
+    width: 100%; height: 180px; object-fit: cover;
+  }
+
+  .news-body { padding: 1.25rem; }
+
+  .news-cat {
+    display: inline-block;
+    background: rgba(27,107,58,0.1); color: var(--green);
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 3px 10px; border-radius: 4px;
+    margin-bottom: 0.75rem;
+  }
+
+  .news-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem; font-weight: 700;
+    color: var(--text); line-height: 1.4;
+    margin-bottom: 0.5rem;
+  }
+
+  .news-date { font-size: 0.78rem; color: var(--muted); }
+
+  /* ─── CONTACT / CTA ─── */
+  .cta-band {
+    background: linear-gradient(135deg, var(--green) 0%, #14502C 100%);
+    padding: 70px 5vw;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+
+  .cta-band::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .cta-band h2 { color: white; margin-bottom: 0.75rem; }
+  .cta-band p { color: rgba(255,255,255,0.65); max-width: 480px; margin: 0 auto 2rem; }
+
+  .btn-white {
+    background: white; color: var(--green);
+    font-weight: 700; font-size: 0.95rem;
+    padding: 0.85rem 2rem; border-radius: 8px; text-decoration: none;
+    display: inline-block;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+  }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(0,0,0,0.25); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--navy);
+    padding: 3rem 5vw 2rem;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .footer-grid {
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .footer-brand .f-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem; font-weight: 800;
+    color: white; margin-bottom: 0.75rem;
+  }
+
+  .footer-brand p { font-size: 0.82rem; line-height: 1.7; max-width: 260px; }
+
+  .footer-col h5 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem; font-weight: 700;
+    color: white; text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 1rem;
+  }
+
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .footer-col a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; }
+  .footer-col a:hover { color: white; }
+
+  .footer-bottom {
+    max-width: 1280px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+    font-size: 0.78rem;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in {
+    opacity: 0; transform: translateY(16px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    .about-grid, .portal-grid, .news-grid, .gallery-grid { grid-template-columns: 1fr; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+    .gallery-grid { grid-template-rows: auto; }
+    .gallery-item:first-child { grid-row: auto; grid-column: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── TOPBAR ─── -->
+<div class="topbar">
+  <span>📍 Jl. Masjid No.1, Kroya, Cilacap, Jawa Tengah</span>
+  <span style="gap:1.5rem;">
+    <a href="tel:+62282494000">📞 (0282) 494-000</a>
+    <a href="/cdn-cgi/l/email-protection#3a53545c557a49575b575b5b48535c17514855435b1449595214535e">✉ <span class="__cf_email__" data-cfemail="cba2a5ada48bb8a6aaa6aaaab9a2ade6a0b9a4b2aae5b8a8a3e5a2af">[email&#160;protected]</span></a>
+  </span>
+</div>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <div class="nav-logo">
+    <div class="logo-emblem">MA</div>
+    <div class="logo-text">
+      <strong>SMA MA'ARIF KROYA</strong>
+      <small>Sistem Informasi Sekolah</small>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#tentang">Tentang</a></li>
+    <li><a href="#portal">Portal Akademik</a></li>
+    <li><a href="#galeri">Galeri</a></li>
+    <li><a href="#berita">Berita</a></li>
+    <li><a href="#kontak">Kontak</a></li>
+  </ul>
+  <a href="#portal" class="nav-cta">Login Portal →</a>
+</nav>
+
+<!-- ─── HERO ─── -->
+<div class="hero">
+  <img
+    class="hero-img"
+    src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1800&auto=format&fit=crop&q=80"
+    alt="Gedung Sekolah"
+  >
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-tag">🌿 Terakreditasi A · Cilacap, Jawa Tengah</div>
+    <h1>
+      Selamat Datang di<br>
+      <em>SMA MA'ARIF</em><br>KROYA
+    </h1>
+    <p>
+      Membentuk generasi berkarakter, berprestasi, dan berakhlak mulia melalui pendidikan Islam yang modern dan terpadu.
+    </p>
+    <div class="hero-actions">
+      <a href="#portal" class="btn-gold">Masuk Portal Siswa →</a>
+      <a href="#tentang" class="btn-ghost">Tentang Sekolah</a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── STATS BAR ─── -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-icon">🎓</div>
+    <div class="stat-info">
+      <strong>1.200+</strong>
+      <span>Siswa Aktif</span>
+    </div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-icon">👨‍🏫</div>
+    <div class="stat-info">
+      <strong>85</strong>
+      <span>Tenaga Pengajar</span>
+    </div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-icon">🏆</div>
+    <div class="stat-info">
+      <strong>200+</strong>
+      <span>Prestasi Diraih</span>
+    </div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-icon">📅</div>
+    <div class="stat-info">
+      <strong>1987</strong>
+      <span>Tahun Berdiri</span>
+    </div>
+  </div>
+</div>
+
+<!-- ─── ABOUT ─── -->
+<div class="section" id="tentang">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;" class="about-grid">
+    <div class="about-img-wrap fade-in">
+      <img
+        class="about-img"
+        src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=900&auto=format&fit=crop&q=80"
+        alt="Kegiatan Belajar"
+      >
+      <div class="about-badge">
+        <strong>37+</strong>
+        <span>Tahun Berpengalaman</span>
+      </div>
+    </div>
+    <div class="fade-in">
+      <div class="section-label">Tentang Kami</div>
+      <h2>Pendidikan Islami yang Berakar, Berprestasi yang Merata</h2>
+      <p class="section-desc">SMA MA'ARIF KROYA adalah sekolah menengah atas berbasis Islam di bawah naungan LP Ma'arif NU Kabupaten Cilacap, berkomitmen menghadirkan pendidikan berkualitas yang mengintegrasikan ilmu umum dan nilai-nilai Islam.</p>
+      <div class="vm-cards">
+        <div class="vm-card">
+          <h4>🎯 Visi</h4>
+          <p>Terwujudnya lulusan yang berilmu, beriman, bertaqwa, berakhlak mulia, dan berdaya saing di era global.</p>
+        </div>
+        <div class="vm-card" style="border-left-color:var(--gold);">
+          <h4>🚀 Misi</h4>
+          <p>Menyelenggarakan pembelajaran yang inovatif, mengembangkan potensi siswa secara holistik, dan membentuk karakter islami yang kuat.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PORTAL AKADEMIK ─── -->
+<div class="portal-section" id="portal">
+  <div class="portal-inner">
+    <div class="section-label">Portal Digital</div>
+    <h2 style="color:white;">Sistem Informasi<br>Akademik Sekolah</h2>
+    <p class="section-desc">Akses mudah untuk siswa, orang tua, guru, dan staf — semua layanan sekolah tersedia dalam satu platform terintegrasi.</p>
+
+    <div class="portal-grid">
+
+      <div class="portal-card fade-in">
+        <div class="portal-card-icon" style="background:rgba(34,197,94,0.15);">📊</div>
+        <h3>Dashboard & Laporan</h3>
+        <p>Pantau KPI sekolah, grafik kehadiran, dan rekap prestasi secara real-time dari satu dashboard terpusat.</p>
+        <a href="#" class="card-link">Buka Dashboard →</a>
+      </div>
+
+      <div class="portal-card fade-in">
+        <div class="portal-card-icon" style="background:rgba(59,130,246,0.15);">🎓</div>
+        <h3>Penerimaan Siswa Baru</h3>
+        <p>Pendaftaran online 24/7, Computer-Based Testing (CBT), validasi dokumen otomatis, dan pengumuman hasil digital.</p>
+        <a href="#" class="card-link">Daftar Sekarang →</a>
+      </div>
+
+      <div class="portal-card fade-in">
+        <div class="portal-card-icon" style="background:rgba(139,92,246,0.15);">📚</div>
+        <h3>Akademik & Nilai</h3>
+        <p>Input nilai, generate rapor sesuai format Kemendikbud, absensi per mapel, dan tracking remedial siswa.</p>
+        <a href="#" class="card-link">Lihat Nilai →</a>
+      </div>
+
+      <div class="portal-card fade-in">
+        <div class="portal-card-icon" style="background:rgba(245,166,35,0.15);">💰</div>
+        <h3>Keuangan & SPP</h3>
+        <p>Cek tagihan SPP, pembayaran online via transfer bank & e-wallet, riwayat pembayaran, dan pengajuan keringanan.</p>
+        <a href="#" class="card-link">Bayar SPP →</a>
+      </div>
+
+      <div class="portal-card fade-in">
+        <div class="portal-card-icon" style="background:rgba(236,72,153,0.15);">👥</div>
+        <h3>Data Siswa & Kesiswaan</h3>
+        <p>Profil siswa, ekstrakurikuler & OSIS, pencatatan disiplin, bimbingan konseling, dan recording prestasi.</p>
+        <a href="#" class="card-link">Profil Siswa →</a>
+      </div>
+
+      <div class="portal-card fade-in">
+        <div class="portal-card-icon" style="background:rgba(6,182,212,0.15);">📱</div>
+        <h3>Portal Orang Tua</h3>
+        <p>Monitor nilai, absensi, pembayaran, dan perkembangan anak secara real-time. Komunikasi langsung dengan guru via aplikasi.</p>
+        <a href="#" class="card-link">Masuk Portal →</a>
+      </div>
+
+      <div class="portal-card fade-in">
+        <div class="portal-card-icon" style="background:rgba(249,115,22,0.15);">👨‍🏫</div>
+        <h3>Kepegawaian</h3>
+        <p>Data guru & staff, jadwal mengajar, absensi, slip gaji digital, dan pengajuan izin/cuti secara online.</p>
+        <a href="#" class="card-link">Portal Guru →</a>
+      </div>
+
+      <div class="portal-card fade-in">
+        <div class="portal-card-icon" style="background:rgba(132,204,22,0.15);">🏫</div>
+        <h3>Sarana & Prasarana</h3>
+        <p>Booking ruangan, pengajuan maintenance, daftar inventaris aset, dan laporan kondisi fasilitas sekolah.</p>
+        <a href="#" class="card-link">Booking Ruangan →</a>
+      </div>
+
+      <div class="portal-card fade-in">
+        <div class="portal-card-icon" style="background:rgba(201,147,42,0.15);">🏆</div>
+        <h3>Kelulusan & Alumni</h3>
+        <p>Cek eligibility kelulusan, download ijazah digital ber-QR code, alumni portal, dan career tracking pasca lulus.</p>
+        <a href="#" class="card-link">Portal Alumni →</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ─── GALERI ─── -->
+<div class="section" id="galeri">
+  <div class="section-label">Galeri</div>
+  <h2>Kehidupan di SMA MA'ARIF KROYA</h2>
+  <p class="section-desc">Momen berharga kegiatan belajar mengajar, ekstrakurikuler, dan prestasi siswa kami.</p>
+
+  <div class="gallery-grid fade-in">
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=700&auto=format&fit=crop&q=80" alt="Kelas">
+      <div class="overlay"><span>Kegiatan Kelas</span></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1562564055-71e051d33c19?w=600&auto=format&fit=crop&q=80" alt="Upacara">
+      <div class="overlay"><span>Upacara Bendera</span></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=600&auto=format&fit=crop&q=80" alt="Laboratorium">
+      <div class="overlay"><span>Laboratorium IPA</span></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&auto=format&fit=crop&q=80" alt="Olahraga">
+      <div class="overlay"><span>Kegiatan Olahraga</span></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&auto=format&fit=crop&q=80" alt="Perpustakaan">
+      <div class="overlay"><span>Perpustakaan</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── BERITA ─── -->
+<div style="background:white; padding:80px 0;" id="berita">
+  <div class="section" style="padding-top:0;padding-bottom:0;">
+    <div class="section-label">Berita & Pengumuman</div>
+    <h2>Info Terbaru Sekolah</h2>
+    <p class="section-desc">Ikuti perkembangan terbaru kegiatan, prestasi, dan pengumuman resmi SMA MA'ARIF KROYA.</p>
+
+    <div class="news-grid">
+      <div class="news-card fade-in">
+        <img class="news-img" src="https://images.unsplash.com/photo-1567168544813-cc03465b4fa8?w=500&auto=format&fit=crop&q=80" alt="Prestasi">
+        <div class="news-body">
+          <span class="news-cat">Prestasi</span>
+          <div class="news-title">Siswa MA'ARIF Raih Juara 1 Olimpiade Matematika Tingkat Kabupaten Cilacap</div>
+          <div class="news-date">15 April 2026</div>
+        </div>
+      </div>
+      <div class="news-card fade-in">
+        <img class="news-img" src="https://images.unsplash.com/photo-1529390079861-591de354faf5?w=500&auto=format&fit=crop&q=80" alt="PPDB">
+        <div class="news-body">
+          <span class="news-cat" style="background:rgba(201,147,42,0.1);color:var(--gold);">PPDB 2026</span>
+          <div class="news-title">Penerimaan Peserta Didik Baru Tahun Ajaran 2026/2027 Resmi Dibuka</div>
+          <div class="news-date">1 April 2026</div>
+        </div>
+      </div>
+      <div class="news-card fade-in">
+        <img class="news-img" src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=500&auto=format&fit=crop&q=80" alt="Sosial">
+        <div class="news-body">
+          <span class="news-cat">Kegiatan</span>
+          <div class="news-title">Bakti Sosial Ramadan: Siswa MA'ARIF Berbagi dengan Masyarakat Sekitar</div>
+          <div class="news-date">28 Maret 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CTA BAND ─── -->
+<div class="cta-band" id="kontak">
+  <h2>Daftarkan Putra-Putri Anda</h2>
+  <p>Pendaftaran siswa baru tahun ajaran 2026/2027 sudah dibuka. Bergabunglah dengan keluarga besar SMA MA'ARIF KROYA.</p>
+  <a href="#" class="btn-white">Daftar Online Sekarang →</a>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="f-logo">SMA MA'ARIF KROYA</div>
+      <p>Sekolah Menengah Atas berbasis Islam di bawah naungan LP Ma'arif NU Kabupaten Cilacap. Berilmu, Beriman, Berprestasi.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Portal</h5>
+      <ul>
+        <li><a href="#">Login Siswa</a></li>
+        <li><a href="#">Login Guru</a></li>
+        <li><a href="#">Portal Orang Tua</a></li>
+        <li><a href="#">Portal Alumni</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Akademik</h5>
+      <ul>
+        <li><a href="#">Jadwal Pelajaran</a></li>
+        <li><a href="#">Kalender Akademik</a></li>
+        <li><a href="#">Ekstrakurikuler</a></li>
+        <li><a href="#">Perpustakaan</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Info</h5>
+      <ul>
+        <li><a href="#">Tentang Sekolah</a></li>
+        <li><a href="#">Berita & Pengumuman</a></li>
+        <li><a href="#">Galeri</a></li>
+        <li><a href="#">Hubungi Kami</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 SMA MA'ARIF KROYA. Hak cipta dilindungi.</span>
+    <span>Jl. Masjid No.1, Kroya, Cilacap, Jawa Tengah · (0282) 494-000</span>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Tweaks
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "primaryColor": "#1B6B3A",
+    "accentColor": "#C9932A"
+  }/*EDITMODE-END*/;
+
+  let tweaks = { ...TWEAK_DEFAULTS };
+
+  function applyTweaks() {
+    document.documentElement.style.setProperty('--green', tweaks.primaryColor);
+    document.documentElement.style.setProperty('--gold', tweaks.accentColor);
+  }
+
+  applyTweaks();
+
+  const panel = document.createElement('div');
+  panel.style.cssText = `position:fixed;bottom:24px;right:24px;z-index:9999;background:white;border:1px solid #e5e7eb;border-radius:14px;padding:20px;width:230px;display:none;flex-direction:column;gap:14px;box-shadow:0 8px 40px rgba(0,0,0,0.15);font-family:'Plus Jakarta Sans',sans-serif;`;
+  panel.innerHTML = `
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:#1A2E1F;">Tweaks</div>
+    <label style="display:flex;flex-direction:column;gap:6px;font-size:0.8rem;color:#6B7E70;">
+      Warna Utama (Hijau)
+      <input type="color" id="tw-primary" value="${tweaks.primaryColor}" style="height:36px;border-radius:8px;border:1px solid #e5e7eb;cursor:pointer;width:100%;">
+    </label>
+    <label style="display:flex;flex-direction:column;gap:6px;font-size:0.8rem;color:#6B7E70;">
+      Warna Aksen (Gold)
+      <input type="color" id="tw-accent" value="${tweaks.accentColor}" style="height:36px;border-radius:8px;border:1px solid #e5e7eb;cursor:pointer;width:100%;">
+    </label>
+  `;
+  document.body.appendChild(panel);
+
+  panel.querySelector('#tw-primary').addEventListener('input', e => {
+    tweaks.primaryColor = e.target.value;
+    applyTweaks();
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: tweaks }, '*');
+  });
+  panel.querySelector('#tw-accent').addEventListener('input', e => {
+    tweaks.accentColor = e.target.value;
+    applyTweaks();
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: tweaks }, '*');
+  });
+
+  window.addEventListener('message', e => {
+    if (e.data?.type === '__activate_edit_mode') panel.style.display = 'flex';
+    if (e.data?.type === '__deactivate_edit_mode') panel.style.display = 'none';
+  });
+
+  window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+</script>
+</body>
+</html>

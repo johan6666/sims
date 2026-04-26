@@ -1,0 +1,55 @@
+# Environment
+.env
+.env.backup
+.env.production
+.env.*.local
+
+# Composer / PHP
+/vendor
+/.phpunit.cache
+/.phpactor.json
+/.phpstorm.meta.php
+/.phpunit.result.cache
+/*.cache
+/*.log
+*.sqlite
+*.sqlite3
+
+# Laravel runtime
+/bootstrap/cache/*.php
+/storage/logs/*.log
+/public/storage
+/public/build
+/storage/pail
+/storage/*.key
+
+# Node / frontend
+/node_modules
+/npm-debug.log*
+/yarn-debug.log*
+/yarn-error.log*
+/pnpm-debug.log*
+/vite.config.*.timestamp*
+
+# Docker / deployment
+/docker-compose.override.yml
+
+# IDE / editor
+/.fleet
+/.idea
+/.nova
+/.phpstorm.meta.php
+/.vscode
+/.zed
+/.cursor
+/.claude
+
+# OS / local artifacts
+.DS_Store
+Thumbs.db
+data.png
+index (1).html
+index (2).html
+
+# Optional local auth snapshot
+/auth.json
