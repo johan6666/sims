@@ -18,7 +18,7 @@ COPY public ./public
 COPY vite.config.js ./
 RUN npm run build
 
-FROM php:8.2-fpm-alpine
+FROM php:8.3-fpm-alpine
 
 WORKDIR /var/www/html
 
