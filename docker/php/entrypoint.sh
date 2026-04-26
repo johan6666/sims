@@ -32,6 +32,10 @@ copy_if_missing /opt/public-build public/build
 ensure_env_file
 
 mkdir -p storage bootstrap/cache
+mkdir -p storage/framework/cache/data
+mkdir -p storage/framework/sessions
+mkdir -p storage/framework/views
+mkdir -p storage/logs
 chown -R www-data:www-data storage bootstrap/cache vendor public/build || true
 
 php artisan package:discover --ansi >/dev/null 2>&1 || true
