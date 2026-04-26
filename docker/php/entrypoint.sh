@@ -34,6 +34,7 @@ ensure_env_file
 mkdir -p storage bootstrap/cache
 chown -R www-data:www-data storage bootstrap/cache vendor public/build || true
 
+php artisan package:discover --ansi >/dev/null 2>&1 || true
 php artisan storage:link --force >/dev/null 2>&1 || true
 php artisan migrate --force --no-interaction || true
 
