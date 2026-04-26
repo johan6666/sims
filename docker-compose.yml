@@ -24,7 +24,7 @@ services:
     container_name: sims-nginx
     restart: unless-stopped
     ports:
-      - "${APP_PORT:-80}:80"
+      - "${APP_PORT:-8004}:80"
     volumes:
       - ./:/var/www/html:ro
       - app_public_build:/var/www/html/public/build:ro
